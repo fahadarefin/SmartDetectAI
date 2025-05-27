@@ -1,0 +1,535 @@
+{#This Page was polished and optimized by using ChatGpt and https://enzostvs-deepsite.hf.space/ powered by deepseek#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - SmartDetectAI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #1e40af;
+            --primary-light: #3b82f6;
+            --secondary: #6b7280;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+            color: #111827;
+        }
+        .container {
+            max-width: 1000px;
+        }
+        .result-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .result-card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .result-header {
+            border-bottom: 1px solid #e5e7eb;
+            background-color: #f8fafc;
+        }
+        .result-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        .result-image {
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .btn-action {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 10px 16px;
+            transition: all 0.2s ease;
+        }
+        .footer {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.025em;
+        }
+        /* PDF specific styles */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-header {
+                display: block !important;
+            }
+        }
+        .print-header {
+            display: none;
+        }
+        .data-card {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        .logo {
+            height: 40px;
+        }
+        .value-na {
+            color: #9ca3af;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+        <div class="min-h-screen flex items-center justify-center px-4 py-8">
+         <div class="w-full max-w-4xl">
+
+        <!-- Results Card -->
+        <div class="result-card overflow-hidden mb-6">
+            <!-- Header -->
+            <div class="result-header px-6 py-4">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-center">
+
+
+
+                    <div class="text-center mb-8">
+                <a href="https://du-eee-micronanolab.com/" target="_blank" class="inline-block">
+                    <img src="../static/logo.png" alt="Microsystems and Nanoengineering Logo" class="logo mx-auto h-16">
+                </a>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mt-6">SmartDetectAI</h1>
+                <p class="text-lg text-gray-600 mt-2">Analysis Results</p>
+            </div>
+
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="p-6">
+                <!-- Sample Image -->
+                <div class="mb-8">
+                    <h3 class="text-lg font-medium text-gray-700 mb-3 flex items-center">
+                        <i class="fas fa-microscope mr-2 text-blue-500"></i> Processed Sample
+                    </h3>
+                    <div class="text-center bg-gray-50 p-4 rounded-lg">
+                        <img src="{{ response.image_path }}" class="result-image mx-auto" alt="Processed sample">
+                    </div>
+
+
+                </div>
+
+                <!-- Results Data -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <div class="data-card p-4">
+                        <h4 class="text-sm font-medium text-gray-500 mb-1 flex items-center">
+                            <i class="fas fa-flask mr-2 text-blue-400"></i> Detected Concentration
+                        </h4>
+                        <p class="result-value mb-0">
+                            {{ response.first_sample_concentration or 'N/A' }}
+                        </p>
+                    </div>
+
+                    <div class="data-card p-4">
+                        <h4 class="text-sm font-medium text-gray-500 mb-1 flex items-center">
+                            <i class="fas fa-check-circle mr-2 text-green-400"></i> Second Sample Concentration
+                        </h4>
+                        <p class="result-value mb-0">
+                            {{ response.second_sample_concentration or 'N/A' }}
+                        </p>
+                    </div>
+
+                    <div class="data-card p-4">
+                        <h4 class="text-sm font-medium text-gray-500 mb-1 flex items-center">
+                            <i class="fas fa-biohazard mr-2 text-red-400"></i> Heavy Metal Indicator
+                        </h4>
+                        <p class="result-value mb-0">
+                            {{ response.detected_hmi or 'N/A' }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Additional Info -->
+                <div class="bg-blue-50 rounded-lg p-4 mb-8">
+                    <h3 class="text-md font-medium text-gray-700 mb-2 flex items-center">
+                        <i class="fas fa-info-circle mr-2 text-blue-500"></i> Analysis Summary
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1"><span class="font-medium">Nanosensor Type:</span> {{ response.nanosensor_type or 'N/A' }}</p>
+                        </div>
+                        <div>
+{#                            <p class="text-sm text-gray-600 mb-1"><span class="font-medium">Sample ID:</span> {{ response.sample_id or 'N/A' }}</p>#}
+{#                            <p class="text-sm text-gray-600"><span class="font-medium">Operator:</span> {{ response.operator or 'N/A' }}</p>#}
+                            <p class="text-sm text-gray-600"><span class="font-medium">Used Neural Network:</span> YoloV8n & XGBoostV3</p>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex flex-col md:flex-row gap-3 no-print justify-center items-center">
+                    <button id="saveResultsBtn" class="btn-action bg-blue-600 hover:bg-blue-700 text-white flex-grow-1 flex items-center justify-center">
+                        <i class="fas fa-file-pdf mr-2"></i> Export PDF Report
+                    </button>
+                    <button id="printResultsBtn" class="btn-action bg-gray-200 hover:bg-gray-300 text-gray-800 flex-grow-1 flex items-center justify-center">
+                    <i class="fas fa-print mr-2"></i> Print Results
+                    </button>
+                    <a href="/" class="btn-action bg-gray-100 hover:bg-gray-200 text-gray-800 flex-grow-1 flex items-center justify-center">
+                     <i class="fas fa-redo mr-2"></i> New Analysis
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Analysis Information -->
+        <div class="result-card p-6 mb-6 no-print">
+            <h3 class="text-lg font-medium text-gray-700 mb-3 flex items-center">
+                <i class="fas fa-exclamation-triangle mr-2 text-yellow-500"></i> Important Information
+            </h3>
+            <div class="space-y-3">
+                <p class="text-sm text-gray-600">
+                    <span class="font-medium">Note:</span> The concentration values are determined through spectrophotometric analysis. For accurate results, ensure proper sample preparation and imaging conditions.
+                </p>
+                <p class="text-sm text-yellow-600 bg-yellow-50 p-3 rounded">
+                    <span class="font-medium">Disclaimer:</span> The results provided by this analysis tool are for research purposes only and may contain inaccuracies. Always verify critical measurements with laboratory equipment and consult with qualified professionals before making any decisions based on these results.
+                </p>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- PDF Template (hidden until generated) -->
+
+    <div id="pdf-template" class="hidden">
+        <div class="p-8">
+            <!-- PDF Header -->
+            <div class="print-header mb-6 border-b border-gray-200 pb-4">
+                <div class="flex justify-between items-center">
+                    <div>
+
+                                            <img src="../static/logo.png" alt="Microsystems and Nanoengineering Logo" class="logo mx-auto h-16">
+
+                    </div>
+                    <div class="text-right">
+                        <h1 class="text-2xl font-bold text-gray-800">SmartDetectAI Analysis Report</h1>
+                        <p class="text-gray-600 text-sm">Report ID: {{ response.report_id or 'N/A' }} | Generated on: <span id="report-date"></span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PDF Content -->
+            <div class="mb-8" style="break-inside: avoid; page-break-inside: avoid;">
+
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Sample Analysis Results</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                    <div>
+                        <h3 class="text-base font-medium text-gray-700 mb-2">Processed Sample</h3>
+                        <div class="bg-gray-50 p-3 rounded-lg">
+                            <img src="{{ response.image_path }}" class="result-image w-full" alt="Processed sample">
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-base font-medium text-gray-700 mb-3">Measurements</h3>
+
+                        <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                            <h4 class="text-sm font-medium text-gray-600 mb-1">Detected Concentration (T2)</h4>
+                            <p class="text-xl font-semibold text-blue-800">
+                                {{ response.first_sample_concentration or '<span class="value-na">N/A</span>' | safe }}
+                            </p>
+                        </div>
+
+                        <div class="bg-green-50 p-4 rounded-lg mb-4">
+                            <h4 class="text-sm font-medium text-gray-600 mb-1">Detected Concentration (T3)</h4>
+                            <p class="text-xl font-semibold text-green-800">
+                                {{ response.second_sample_concentration or '<span class="value-na">N/A</span>' | safe}}
+                            </p>
+                        </div>
+
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h4 class="text-sm font-medium text-gray-600 mb-1">Heavy Metal Indicator</h4>
+                            <p class="text-xl font-semibold text-red-800">
+                                {{ response.detected_hmi or '<span class="value-na">N/A</span>' | safe}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Details -->
+            <div class="mb-8" style="break-inside: avoid; page-break-inside: avoid;">
+
+                <h2 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">Analysis Details</h2>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                    <table class="w-full text-sm">
+                        <tbody>
+                            <tr class="border-b border-gray-200">
+                                <td class="py-2 font-medium text-gray-700">Analysis Date</td>
+                                <td class="py-2 text-gray-600" id="analysis-date"></td>
+                            </tr>
+                            <tr class="border-b border-gray-200">
+                                <td class="py-2 font-medium text-gray-700">Nanosensor Type</td>
+                                <td class="py-2 text-gray-600">{{ response.nanosensor_type or 'N/A' }}</td>
+                            </tr>
+{#                            <tr class="border-b border-gray-200">#}
+{#                                <td class="py-2 font-medium text-gray-700">Sample ID</td>#}
+{#                                <td class="py-2 text-gray-600">{{ response.sample_id or 'N/A' }}</td>#}
+{#                            </tr>#}
+{#                            <tr>#}
+{#                                <td class="py-2 font-medium text-gray-700">Operator</td>#}
+{#                                <td class="py-2 text-gray-600">{{ response.operator or 'N/A' }}</td>#}
+{#                            </tr>#}
+                        </tbody>
+                    </table>
+                </div>
+
+{#                <div class="bg-yellow-50 p-4 rounded-lg">#}
+{#                    <h3 class="text-sm font-medium text-gray-700 mb-2">Quality Notes</h3>#}
+{#                    <p class="text-xs text-gray-600">#}
+{#                        {{ response.quality_notes or 'No quality notes provided for this analysis.' }}#}
+{#                    </p>#}
+{#                </div>#}
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="text-xs text-gray-500 border-t border-gray-200 pt-4">
+                <p class="mb-2">
+                    <strong>Disclaimer:</strong> This report is generated automatically by SmartDetectAI system. The Nanoengineering Group, University of Dhaka is not responsible for any decisions made based on this data without proper verification.
+                </p>
+                <p>
+                    © Microsystems and Nanoengineering Group, University of Dhaka | <span id="footer-date"></span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center py-6 mt-6 border-t border-gray-200 no-print">
+        <div class="container mx-auto px-4  justify-center">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="mb-2 md:mb-0">
+                    <i class="fas fa-university mr-1"></i> Microsystems and Nanoengineering Group, University of Dhaka
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-500 hover:text-blue-600"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-red-600"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-gray-700"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg p-6 max-w-sm w-full text-center">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Generating Report</h3>
+            <p class="text-gray-600">Please wait while we prepare your PDF document...</p>
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="fixed bottom-4 right-4 z-50">
+        <div id="errorToast" class="bg-red-500 text-white px-6 py-4 rounded-lg shadow-xl transform transition-all duration-300 ease-in-out translate-y-4 opacity-0 hidden">
+            <div class="flex items-start">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-xl"></i>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium" id="errorTitle">Error</h3>
+                    <p class="mt-1 text-sm" id="errorMessage"></p>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex">
+                    <button onclick="hideErrorToast()" class="bg-red-500 rounded-md inline-flex text-white focus:outline-none">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date for the report
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            };
+
+            const dateStr = now.toLocaleDateString('en-US', options);
+            document.getElementById('report-date').textContent = dateStr;
+            document.getElementById('analysis-date').textContent = dateStr;
+            document.getElementById('footer-date').textContent = now.getFullYear();
+
+            // Show loading modal
+            function showLoading() {
+                document.getElementById('loadingModal').classList.remove('hidden');
+            }
+
+            // Hide loading modal
+            function hideLoading() {
+                document.getElementById('loadingModal').classList.add('hidden');
+            }
+
+            // Show error toast
+            function showErrorToast(title, message) {
+                const toast = document.getElementById('errorToast');
+                document.getElementById('errorTitle').textContent = title;
+                document.getElementById('errorMessage').textContent = message;
+
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-4');
+                    toast.classList.remove('opacity-0');
+                }, 10);
+
+                // Auto-hide after 5 seconds
+                setTimeout(hideErrorToast, 5000);
+            }
+
+            // Hide error toast
+            function hideErrorToast() {
+                const toast = document.getElementById('errorToast');
+                toast.classList.add('translate-y-4');
+                toast.classList.add('opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }
+
+            // PDF Generation
+            document.getElementById('saveResultsBtn').addEventListener('click', function() {
+                // Show loading state
+                const btn = this;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Generating...';
+                btn.disabled = true;
+
+                showLoading();
+                window.scrollTo(0, 0);
+                // Clone the PDF template
+                const element = document.getElementById('pdf-template');
+                const clone = element.cloneNode(true);
+                clone.classList.remove('hidden');
+
+                // PDF options
+                const opt = {
+                margin: 10,
+                filename: `SmartDetectAI_Report_${now.getTime()}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    logging: false,
+                    useCORS: true
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                },
+                pagebreak: {
+                    mode: ['avoid-all', 'css', 'legacy'],
+                }
+            };
+
+
+
+
+
+                // Generate PDF
+                setTimeout(() => {
+                    html2pdf().set(opt).from(clone).save().then(() => {
+                        // Restore button state
+                        btn.innerHTML = '<i class="fas fa-file-pdf mr-2"></i> Export PDF Report';
+                        btn.disabled = false;
+                        hideLoading();
+                    }).catch(err => {
+                        // Show error
+                        showErrorToast('PDF Generation Failed', 'Failed to generate PDF: ' + err.message);
+
+                        // Restore button state
+                        btn.innerHTML = '<i class="fas fa-file-pdf mr-2"></i> Export PDF Report';
+                        btn.disabled = false;
+                        hideLoading();
+                    });
+                }, 500);
+            });
+
+            // Print functionality
+            document.getElementById('printResultsBtn').addEventListener('click', function() {
+                // Show loading state
+                const btn = this;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Preparing...';
+                btn.disabled = true;
+
+                showLoading();
+
+                // Clone the PDF template
+                const element = document.getElementById('pdf-template');
+                const clone = element.cloneNode(true);
+                clone.classList.remove('hidden');
+
+                // Create a temporary iframe for printing
+                setTimeout(() => {
+                    const iframe = document.createElement('iframe');
+                    iframe.style.position = 'absolute';
+                    iframe.style.width = '1px';
+                    iframe.style.height = '1px';
+                    iframe.style.left = '-9999px';
+                    document.body.appendChild(iframe);
+
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    iframeDoc.open();
+                    iframeDoc.write(clone.outerHTML);
+                    iframeDoc.close();
+
+                    // Wait for content to load
+                    iframe.onload = function() {
+                        iframe.contentWindow.focus();
+                        iframe.contentWindow.print();
+
+                        // Clean up
+                        setTimeout(() => {
+                            document.body.removeChild(iframe);
+
+                            // Restore button state
+                            btn.innerHTML = '<i class="fas fa-print mr-2"></i> Print Results';
+                            btn.disabled = false;
+                            hideLoading();
+                        }, 100);
+                    };
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
